@@ -78,6 +78,8 @@ fi
 # MAGENTO_DIR=/var/www/html/${SITE_NAME}
 MAGENTO_DIR=/home/${MAGENTO_SYSTEM_USER}/${SITE_NAME}
 
+echo "Magento installation directory: ${MAGENTO_DIR}"
+
 ### Start installation
 
 apt-get update -q
@@ -112,11 +114,17 @@ apt-get update && apt-get install -yq elasticsearch=${ELASTICSEARCH_VERSION}
 
 # Start elasticsearch
 
+echo "Enabling and starting Elasticsearch..."
+
 systemctl enable elasticsearch
 systemctl start elasticsearch
 
+echo "Enabling and starting Elasticsearch...OK"
 
 # Install composer
+
+
+echo "Intalling coposer..."
 
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
@@ -125,19 +133,22 @@ php -r "unlink('composer-setup.php');"
 
 mv composer.phar /usr/local/bin/composer
 
+echo "Intalling coposer...OK"
+
 # Initilise database
 
-echo "######### Initilise database"
+echo -n "Initilise database..."
 
 echo "CREATE DATABASE ${MAGENTO_DATABASE};
 CREATE USER '${MAGENTO_DATABASE_USERNAME}'@'localhost' IDENTIFIED BY '${MAGENTO_DATABASE_PASSWORD}';
 ALTER USER '${MAGENTO_DATABASE_USERNAME}'@'localhost' IDENTIFIED WITH mysql_native_password BY '${MAGENTO_DATABASE_PASSWORD}';
 GRANT ALL PRIVILEGES ON *.* TO '${MAGENTO_DATABASE_USERNAME}'@'localhost' WITH GRANT OPTION;" | mysql -u root
 
+echo "OK"
 
 ### Apache configuration
 
-echo "######### Update apache configurations"
+echo -n "Updating apache configurations..."
 
 # Add 8080 port to listen elasticsearch
 
@@ -206,23 +217,25 @@ echo '<VirtualHost *:8080>
 </VirtualHost>' | tee /etc/apache2/sites-available/${SITE_NAME}-elasticsearch.conf
 
 
+echo "OK"
+
 # Disable default site
 
-echo "######### Disabling default apache site"
+echo "Disabling default apache site..."
 a2dissite 000-default
 
-echo "######### Enabling new sites"
+echo "Enabling new site..."
 
 a2ensite ${SITE_NAME}
 a2ensite ${SITE_NAME}-elasticsearch
 
 a2enmod proxy_http rewrite
 
-echo "######### Reload apache"
+echo "Reload apache"
 
 systemctl reload apache2
 
-echo "######### Add magento user"
+echo -n "Adding magento user..."
 # Add magento user
 
 sudo useradd -m -p $(openssl passwd -1 ${MAGENTO_SYSTEM_PASSWORD}) -s /bin/bash ${MAGENTO_SYSTEM_USER}
@@ -231,9 +244,9 @@ sudo useradd -m -p $(openssl passwd -1 ${MAGENTO_SYSTEM_PASSWORD}) -s /bin/bash 
 
 usermod -a -G www-data ${MAGENTO_SYSTEM_USER}
 
+echo "OK"
 
-
-echo "######### Add composer crendentials to magento home dir"
+echo -n "Adding composer crendentials to magento home dir..."
 # Add composer crendentials to magento home dir
 
 # For composer 2 and above
@@ -251,8 +264,9 @@ echo '{
 }' | tee ~/.config/composer/auth.json
 EOF
 
+echo "OK"
 
-echo "######### Installing magento"
+echo "Starting Install magento"
 
 # Clean 
 rm -rf ${MAGENTO_DIR}
@@ -263,7 +277,7 @@ cd
 composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=${MAGENTO_VERSION} ${MAGENTO_DIR}
 EOF
 
-echo "######### Initilise magento"
+echo "Initilise magento"
 
 sudo -H -u ${MAGENTO_SYSTEM_USER} bash -c "cd ${MAGENTO_DIR}; bin/magento setup:install \
 --base-url=${BASE_URL} \
@@ -281,7 +295,9 @@ sudo -H -u ${MAGENTO_SYSTEM_USER} bash -c "cd ${MAGENTO_DIR}; bin/magento setup:
 --timezone=Australia/Sydney \
 --use-rewrites=1"
 
-echo "######### Fix permission"
+echo "Initilise magento...OK"
+
+echo "Fix permission..."
 # Fix permission
 sudo MAGENTO_DIR=${MAGENTO_DIR} -H -u ${MAGENTO_SYSTEM_USER} bash <<"EOF"
 cd ${MAGENTO_DIR}
@@ -291,16 +307,19 @@ EOF
 
 chown -R :www-data ${MAGENTO_DIR}
 
+echo "Fix permission...OK"
+
 echo "######### Disable two factor"
 
 # Disable two factor
 sudo -H -u ${MAGENTO_SYSTEM_USER} bash -c "cd ${MAGENTO_DIR}; php bin/magento module:disable Magento_TwoFactorAuth; bin/magento cron:install"
 
-echo "######### Restarting apache"
+echo "Restarting apache..."
 # Restart apache to apply all changes
 systemctl restart apache2
 
-echo "######### Magento installation finished"
+echo "Restarting apache...OK"
+echo "######### Magento installation finished ########"
 
 # Install ftp file server
 
