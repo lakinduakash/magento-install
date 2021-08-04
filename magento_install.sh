@@ -14,9 +14,12 @@ MAGENTO_DATABASE_USERNAME=magentip
 MAGENTO_DATABASE_PASSWORD=magento@123
 
 SITE_NAME=mydomain # Site domain
+BASE_URL=http://mydomain.com
 
+# For ftp
 MAGENTO_SYSTEM_USER=magento
 MAGENTO_SYSTEM_PASSWORD=magento@123
+
 
 ## VERSIONS
 
@@ -28,6 +31,41 @@ APACHE_VERSION=2.*
 COMPOSER_VERSION=2.*
 
 # JAVA_VERSION=8
+
+
+# Read options
+
+OPTS=`getopt -o "" --long magento-username:,magento-email:,magento-password:,database:,database-user:,database-password:,site-name:,base-url:,system-user:,system-password: -- "$@"`
+eval set -- "$OPTS"
+
+# extract options and their arguments into variables.
+while true ; do
+    case "$1" in
+        --magento-username)
+            MAGENTO_ADMIN_USERNAME=$2 ; shift 2 ;;
+        --magento-email)
+            MAGENTO_ADMIN_EMAIL=$2 ; shift 2 ;;
+        --magento-password)
+            MAGENTO_ADMIN_PASSWORD=$2 ; shift 2;;
+		--database)
+            MAGENTO_DATABASE=$2 ; shift 2;;
+		--database-user)
+            MAGENTO_DATABASE_USERNAME=$2 ; shift 2;;
+		--database-password)
+            MAGENTO_DATABASE_PASSWORD=$2 ; shift 2;;
+		--site-name)
+            SITE_NAME=$2 ; shift 2;;
+		--base-url)
+            BASE_URL=$2 ; shift 2;;
+		--system-user)
+            MAGENTO_SYSTEM_USER=$2 ; shift 2;;	
+		--system-password)
+            MAGENTO_SYSTEM_PASSWORD=$2 ; shift 2;;							
+
+        --) shift ; break ;;
+        *) echo "Internal error!" ; exit 1 ;;
+    esac
+done
 
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
@@ -228,7 +266,7 @@ EOF
 echo "######### Initilise magento"
 
 sudo -H -u ${MAGENTO_SYSTEM_USER} bash -c "cd ${MAGENTO_DIR}; bin/magento setup:install \
---base-url=http://${SITE_NAME} \
+--base-url=${BASE_URL} \
 --db-host=localhost \
 --db-name=${MAGENTO_DATABASE} \
 --db-user=${MAGENTO_DATABASE_USERNAME} \
