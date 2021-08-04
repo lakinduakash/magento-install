@@ -1,19 +1,24 @@
-# Config
+#!/bin/bash
 
-MAGENTO_SYSTEM_USER=magento
-MAGENTO_SYSTEM_PASSWORD=magento@123
+### Config
+
+# magento
 
 MAGENTO_ADMIN_USERNAME=admin
 MAGENTO_ADMIN_EMAIL=admin@admin.com
 MAGENTO_ADMIN_PASSWORD=admin@123
 
-MAGENTO_DATABASE=magento
+# Database
+MAGENTO_DATABASE=magento 
 MAGENTO_DATABASE_USERNAME=magentip
 MAGENTO_DATABASE_PASSWORD=magento@123
 
-SITE_NAME=mydomain
+SITE_NAME=mydomain # Site domain
 
-# VERSIONS
+MAGENTO_SYSTEM_USER=magento
+MAGENTO_SYSTEM_PASSWORD=magento@123
+
+## VERSIONS
 
 MAGENTO_VERSION=2.4.2
 MYSQL_VERSION=8.0.*
@@ -23,9 +28,6 @@ APACHE_VERSION=2.*
 COMPOSER_VERSION=2.*
 
 # JAVA_VERSION=8
-
-
-#!/bin/bash
 
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
@@ -154,6 +156,9 @@ echo "<VirtualHost *:80>
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" | sudo tee /etc/apache2/sites-available/${SITE_NAME}.conf
 
 # Update /etc/apache2.conf
+
+sed "s+MAGENTO_HOME_DIR+/home/${MAGENTO_SYSTEM_USER}+g" apache2.conf
+cp -f apache2.conf /etc/apache2/apache2.conf
 
 # echo "<Directory ${MAGENTO_DIR}>
 #         Options Indexes FollowSymLinks
