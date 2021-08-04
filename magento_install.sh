@@ -56,7 +56,8 @@ sudo apt-get install -yq \
     libapache2-mod-php${PHP_VERSION} \
     php${PHP_VERSION}-mysql \
 	zip \
-	unzip
+	unzip \
+	openssl
 
 # Install php extensions
 
@@ -159,12 +160,6 @@ echo "<VirtualHost *:80>
 
 sed "s+MAGENTO_HOME_DIR+/home/${MAGENTO_SYSTEM_USER}+g" apache2.conf > /etc/apache2/apache2.conf
 
-# echo "<Directory ${MAGENTO_DIR}>
-#         Options Indexes FollowSymLinks
-#         AllowOverride None
-#         Require all granted
-# </Directory>" | tee -a /etc/apache2/apache2.conf
-
 # Add ${SITE_NAME}-elasticsearch.conf
 
 echo '<VirtualHost *:8080>
@@ -192,7 +187,7 @@ systemctl reload apache2
 echo "######### Add magento user"
 # Add magento user
 
-useradd -s /bin/bash -m -p ${MAGENTO_SYSTEM_PASSWORD} ${MAGENTO_SYSTEM_USER}
+sudo useradd -m -p $(openssl passwd -1 ${MAGENTO_SYSTEM_PASSWORD}) -s /bin/bash ${MAGENTO_SYSTEM_USER}
 
 # Add magento user to apache group
 
@@ -268,3 +263,13 @@ echo "######### Restarting apache"
 systemctl restart apache2
 
 echo "######### Magento installation finished"
+
+# Install ftp file server
+
+apt install vsftpd
+
+sed -i "s+#write_enable=YES+write_enable=YES+g" /etc/vsftpd.conf
+
+systemctl restart vsftpd
+
+# Ftp server is ready
