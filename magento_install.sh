@@ -278,7 +278,7 @@ sudo -H -u ${MAGENTO_SYSTEM_USER} bash -c "cd ${MAGENTO_DIR}; bin/magento setup:
 --admin-password=${MAGENTO_ADMIN_PASSWORD} \
 --language=en_US \
 --currency=USD \
---timezone=America/Chicago \
+--timezone=Australia/Sydney \
 --use-rewrites=1"
 
 echo "######### Fix permission"
