@@ -157,8 +157,7 @@ echo "<VirtualHost *:80>
 
 # Update /etc/apache2.conf
 
-sed "s+MAGENTO_HOME_DIR+/home/${MAGENTO_SYSTEM_USER}+g" apache2.conf
-cp -f apache2.conf /etc/apache2/apache2.conf
+sed "s+MAGENTO_HOME_DIR+/home/${MAGENTO_SYSTEM_USER}+g" apache2.conf > /etc/apache2/apache2.conf
 
 # echo "<Directory ${MAGENTO_DIR}>
 #         Options Indexes FollowSymLinks
