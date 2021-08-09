@@ -105,21 +105,21 @@ apt-get install -yq php7.4-{mysql,mcrypt,gd,curl,intl,bcmath,ctype,dom,iconv,mbs
 
 # Install elasticsearch
 
-wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+# wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 
-echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-7.x.list
+# echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-7.x.list
 
-apt-get update && apt-get install -yq elasticsearch=${ELASTICSEARCH_VERSION}
+# apt-get update && apt-get install -yq elasticsearch=${ELASTICSEARCH_VERSION}
 
 
-# Start elasticsearch
+# # Start elasticsearch
 
-echo "Enabling and starting Elasticsearch..."
+# echo "Enabling and starting Elasticsearch..."
 
-systemctl enable elasticsearch
-systemctl start elasticsearch
+# systemctl enable elasticsearch
+# systemctl start elasticsearch
 
-echo "Enabling and starting Elasticsearch...OK"
+# echo "Enabling and starting Elasticsearch...OK"
 
 # Install composer
 
@@ -152,22 +152,22 @@ echo -n "Updating apache configurations..."
 
 # Add 8080 port to listen elasticsearch
 
-echo "# If you just change the port or add more ports here, you will likely also
-# have to change the VirtualHost statement in
-# /etc/apache2/sites-enabled/000-default.conf
+# echo "# If you just change the port or add more ports here, you will likely also
+# # have to change the VirtualHost statement in
+# # /etc/apache2/sites-enabled/000-default.conf
 
-Listen 80
-Listen 8080
+# Listen 80
+# Listen 8080
 
-<IfModule ssl_module>
-        Listen 443
-</IfModule>
+# <IfModule ssl_module>
+#         Listen 443
+# </IfModule>
 
-<IfModule mod_gnutls.c>
-        Listen 443
-</IfModule>
+# <IfModule mod_gnutls.c>
+#         Listen 443
+# </IfModule>
 
-# vim: syntax=apache ts=4 sw=4 sts=4 sr noet" | sudo tee /etc/apache2/ports.conf
+# # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" | sudo tee /etc/apache2/ports.conf
 
 echo "<VirtualHost *:80>
 	# The ServerName directive sets the request scheme, hostname and port that
@@ -211,10 +211,10 @@ sed "s+MAGENTO_HOME_DIR+/home/${MAGENTO_SYSTEM_USER}+g" apache2.conf > /etc/apac
 
 # Add ${SITE_NAME}-elasticsearch.conf
 
-echo '<VirtualHost *:8080>
-    ProxyPass "/" "http://localhost:9200/"
-    ProxyPassReverse "/" "http://localhost:9200/"
-</VirtualHost>' | tee /etc/apache2/sites-available/${SITE_NAME}-elasticsearch.conf
+# echo '<VirtualHost *:8080>
+#     ProxyPass "/" "http://localhost:9200/"
+#     ProxyPassReverse "/" "http://localhost:9200/"
+# </VirtualHost>' | tee /etc/apache2/sites-available/${SITE_NAME}-elasticsearch.conf
 
 
 echo "OK"
@@ -227,7 +227,7 @@ a2dissite 000-default
 echo "Enabling new site..."
 
 a2ensite ${SITE_NAME}
-a2ensite ${SITE_NAME}-elasticsearch
+# a2ensite ${SITE_NAME}-elasticsearch
 
 a2enmod proxy_http rewrite
 
