@@ -294,6 +294,8 @@ sudo -H -u ${MAGENTO_SYSTEM_USER} bash -c "cd ${MAGENTO_DIR}; bin/magento setup:
 --language=en_US \
 --currency=USD \
 --timezone=Australia/Sydney \
+--elasticsearch-host=localhost 
+--elasticsearch-port=8080
 --use-rewrites=1"
 
 echo "Initilise magento...OK"
