@@ -105,26 +105,26 @@ apt-get install -yq php7.4-{mysql,mcrypt,gd,curl,intl,bcmath,ctype,dom,iconv,mbs
 
 # Install elasticsearch
 
-wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+# wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 
-echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-7.x.list
+# echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-7.x.list
 
-apt-get update && apt-get install -yq elasticsearch=${ELASTICSEARCH_VERSION}
+# apt-get update && apt-get install -yq elasticsearch=${ELASTICSEARCH_VERSION}
 
 
 # Start elasticsearch
 
-echo "Enabling and starting Elasticsearch..."
+# echo "Enabling and starting Elasticsearch..."
 
-systemctl enable elasticsearch
-systemctl start elasticsearch
+# systemctl enable elasticsearch
+# systemctl start elasticsearch
 
-echo "Enabling and starting Elasticsearch...OK"
+# echo "Enabling and starting Elasticsearch...OK"
 
 # Install composer
 
 
-echo "Intalling coposer..."
+echo "Intalling composer..."
 
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
@@ -157,7 +157,7 @@ echo "# If you just change the port or add more ports here, you will likely also
 # /etc/apache2/sites-enabled/000-default.conf
 
 Listen 80
-Listen 8080
+# Listen 8080
 
 <IfModule ssl_module>
         Listen 443
@@ -177,7 +177,7 @@ echo "<VirtualHost *:80>
 	# match this virtual host. For the default virtual host (this file) this
 	# value is not decisive as it is used as a last resort host regardless.
 	# However, you must set it for any further virtual host explicitly.
-	#ServerName www.example.com
+	ServerName ${SITE_NAME}
 
 	ServerAdmin webmaster@localhost
 	DocumentRoot ${MAGENTO_DIR}
@@ -211,13 +211,13 @@ sed "s+MAGENTO_HOME_DIR+/home/${MAGENTO_SYSTEM_USER}+g" apache2.conf > /etc/apac
 
 # Add ${SITE_NAME}-elasticsearch.conf
 
-echo '<VirtualHost *:8080>
-    ProxyPass "/" "http://localhost:9200/"
-    ProxyPassReverse "/" "http://localhost:9200/"
-</VirtualHost>' | tee /etc/apache2/sites-available/${SITE_NAME}-elasticsearch.conf
+# echo '<VirtualHost *:8080>
+#    ProxyPass "/" "http://localhost:9200/"
+#    ProxyPassReverse "/" "http://localhost:9200/"
+# </VirtualHost>' | tee /etc/apache2/sites-available/${SITE_NAME}-elasticsearch.conf
 
 
-echo "OK"
+# echo "OK"
 
 # Disable default site
 
@@ -227,7 +227,8 @@ a2dissite 000-default
 echo "Enabling new site..."
 
 a2ensite ${SITE_NAME}
-a2ensite ${SITE_NAME}-elasticsearch
+
+# a2ensite ${SITE_NAME}-elasticsearch
 
 a2enmod proxy_http rewrite
 
@@ -305,7 +306,7 @@ find var generated vendor pub/static pub/media app/etc -type f -exec chmod g+w {
 find var generated vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} +
 EOF
 
-chown -R :www-data ${MAGENTO_DIR}
+chown -R ${MAGENTO_SYSTEM_USER}:www-data ${MAGENTO_DIR}
 
 echo "Fix permission...OK"
 
