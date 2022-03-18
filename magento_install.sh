@@ -20,6 +20,10 @@ BASE_URL=http://mydomain.com
 MAGENTO_SYSTEM_USER=magento
 MAGENTO_SYSTEM_PASSWORD=magento@123
 
+#Elasticsearch
+ELASTICSEARCH_HOST=localhost
+ELASTICSEARCH_PORT=8080
+
 
 ## VERSIONS
 
@@ -294,8 +298,8 @@ sudo -H -u ${MAGENTO_SYSTEM_USER} bash -c "cd ${MAGENTO_DIR}; bin/magento setup:
 --language=en_US \
 --currency=USD \
 --timezone=Australia/Sydney \
---elasticsearch-host=localhost \ 
---elasticsearch-port=8080 \
+--elasticsearch-host=${ELASTICSEARCH_HOST} \
+--elasticsearch-port=${ELASTICSEARCH_PORT} \
 --use-rewrites=1"
 
 echo "Initilise magento...OK"
