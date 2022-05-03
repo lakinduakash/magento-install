@@ -39,7 +39,7 @@ COMPOSER_VERSION=2.*
 
 # Read options
 
-OPTS=`getopt -o "" --long magento-username:,magento-email:,magento-password:,database:,database-user:,database-password:,site-name:,base-url:,system-user:,system-password: -- "$@"`
+OPTS=`getopt -o "" --long magento-username:,magento-email:,magento-password:,database:,database-user:,database-password:,site-name:,base-url:,system-user:,system-password:,elasticsearch-host:,elasticsearch-port: -- "$@"`
 eval set -- "$OPTS"
 
 # extract options and their arguments into variables.
