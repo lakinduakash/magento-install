@@ -33,6 +33,8 @@ Every argument is optional and default value will be applied if ommited.
 | --base-url          | Magento base URL                                 | http://mydomain.com |
 | --system-user       | New system user for Magento <br>file permissions | magento             |
 | --system-password   | Magento system user password                     | magento@123         |
+| --elasticsearch-host| Elasticsearch host                               | localhost           |
+| --elasticsearch-port| Elasticsearch port                               | 8080                |
 
 
 system-user and system-password can be used to log into ftp server
@@ -50,6 +52,8 @@ system-user and system-password can be used to log into ftp server
     --base-url http://mydomain.com \
     --system-user=magento \
     --system-password=magento@123
+    --elasticsearch-host=localhost
+    --elasticsearch-port=8080
 ```
 
 It will take a few minutes to complete.
