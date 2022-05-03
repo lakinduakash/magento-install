@@ -334,10 +334,10 @@ echo "######### Magento installation finished ########"
 
 # Install ftp file server
 
-apt install vsftpd
+# apt install vsftpd
 
-sed -i "s+#write_enable=YES+write_enable=YES+g" /etc/vsftpd.conf
+# sed -i "s+#write_enable=YES+write_enable=YES+g" /etc/vsftpd.conf
 
-systemctl restart vsftpd
+# systemctl restart vsftpd
 
 # Ftp server is ready
