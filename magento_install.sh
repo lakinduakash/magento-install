@@ -45,11 +45,11 @@ eval set -- "$OPTS"
 # extract options and their arguments into variables.
 while true ; do
     case "$1" in
-        --magento-username)
+		--magento-username)
             MAGENTO_ADMIN_USERNAME=$2 ; shift 2 ;;
-        --magento-email)
+        	--magento-email)
             MAGENTO_ADMIN_EMAIL=$2 ; shift 2 ;;
-        --magento-password)
+        	--magento-password)
             MAGENTO_ADMIN_PASSWORD=$2 ; shift 2;;
 		--database)
             MAGENTO_DATABASE=$2 ; shift 2;;
@@ -64,7 +64,11 @@ while true ; do
 		--system-user)
             MAGENTO_SYSTEM_USER=$2 ; shift 2;;	
 		--system-password)
-            MAGENTO_SYSTEM_PASSWORD=$2 ; shift 2;;							
+            MAGENTO_SYSTEM_PASSWORD=$2 ; shift 2;;
+	    	--elasticsearch-host)
+	    ELASTICSEARCH_HOST=$2 ; shift 2;;
+	    	--elasticsearch-port)
+	    ELASTICSEARCH_PORT=$2 ; shift 2;;
 
         --) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
