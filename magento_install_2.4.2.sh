@@ -32,7 +32,7 @@ MYSQL_VERSION=8.0.*
 PHP_VERSION=7.4
 ELASTICSEARCH_VERSION=7.13.*
 APACHE_VERSION=2.*
-COMPOSER_VERSION=2.*
+COMPOSER_VERSION=2.1.14
 
 # JAVA_VERSION=8
 
@@ -140,6 +140,8 @@ php composer-setup.php
 php -r "unlink('composer-setup.php');"
 
 mv composer.phar /usr/local/bin/composer
+
+composer self-update ${COMPOSER_VERSION}
 
 echo "Intalling coposer...OK"
 
