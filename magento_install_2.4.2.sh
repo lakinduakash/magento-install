@@ -109,7 +109,7 @@ sudo apt-get install -yq \
 
 # Install php extensions
 
-apt-get install -yq php7.4-{mysql,mcrypt,gd,curl,intl,bcmath,ctype,dom,iconv,mbstring,simplexml,soap,xsl,zip}
+apt-get install -yq php${PHP_VERSION}-{mysql,mcrypt,gd,curl,intl,bcmath,ctype,dom,iconv,mbstring,simplexml,soap,xsl,zip}
 
 # Install elasticsearch
 
